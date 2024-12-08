@@ -36,6 +36,19 @@ pub fn build(b: *std.Build) void {
 
     const run_day1b = b.addRunArtifact(day1b);
 
+    // ---- Day 2a -------
+    const day2a = b.addExecutable(.{
+        .name = "day2a",
+        .root_source_file = b.path("Day2/src/first.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
+    day2a.root_module.addImport("shared", shared);
+    b.installArtifact(day2a);
+
+    const run_day2a = b.addRunArtifact(day2a);
+
     // ---- Run steps
     const run_step = b.step("run", "Run a specific executable based on input");
     run_step.dependOn(b.getInstallStep());
@@ -49,6 +62,8 @@ pub fn build(b: *std.Build) void {
             run_step.dependOn(&run_day1a.step);
         } else if (std.mem.eql(u8, day, "day1b")) {
             run_step.dependOn(&run_day1b.step);
+        } else if (std.mem.eql(u8, day, "day2a")) {
+            run_step.dependOn(&run_day2a.step);
         }
     }
 }
