@@ -10,45 +10,45 @@ pub fn build(b: *std.Build) void {
         .root_source_file = b.path("shared/shared.zig"),
     });
 
-    // ---- Day 1 -------
-    const day1 = b.addExecutable(.{
-        .name = "day1",
-        .root_source_file = b.path("Day1/src/main.zig"),
+    // ---- Day 1a -------
+    const day1a = b.addExecutable(.{
+        .name = "day1a",
+        .root_source_file = b.path("Day1/src/first.zig"),
         .target = target,
         .optimize = optimize,
     });
 
-    day1.root_module.addImport("shared", shared);
-    b.installArtifact(day1);
+    day1a.root_module.addImport("shared", shared);
+    b.installArtifact(day1a);
 
-    const run_day1 = b.addRunArtifact(day1);
+    const run_day1a = b.addRunArtifact(day1a);
 
-    // ---- Day 2 -------
-    const day2 = b.addExecutable(.{
-        .name = "day2",
-        .root_source_file = b.path("Day2/src/main.zig"),
+    // ---- Day 1b -------
+    const day1b = b.addExecutable(.{
+        .name = "day1b",
+        .root_source_file = b.path("Day1/src/second.zig"),
         .target = target,
         .optimize = optimize,
     });
 
-    day2.root_module.addImport("shared", shared);
-    b.installArtifact(day2);
+    day1b.root_module.addImport("shared", shared);
+    b.installArtifact(day1b);
 
-    const run_day2 = b.addRunArtifact(day2);
+    const run_day1b = b.addRunArtifact(day1b);
 
     // ---- Run steps
     const run_step = b.step("run", "Run a specific executable based on input");
     run_step.dependOn(b.getInstallStep());
 
     if (b.args) |args| {
-        run_day1.addArgs(args);
-        run_day2.addArgs(args);
+        run_day1a.addArgs(args);
+        run_day1b.addArgs(args);
 
         const day = args[0];
-        if (std.mem.eql(u8, day, "day1")) {
-            run_step.dependOn(&run_day1.step);
-        } else if (std.mem.eql(u8, day, "day2")) {
-            run_step.dependOn(&run_day2.step);
+        if (std.mem.eql(u8, day, "day1a")) {
+            run_step.dependOn(&run_day1a.step);
+        } else if (std.mem.eql(u8, day, "day1b")) {
+            run_step.dependOn(&run_day1b.step);
         }
     }
 }
