@@ -8,7 +8,7 @@ pub fn main() !void {
     defer _ = gpa.deinit();
 
     // Get puzzle input
-    const lines = try shared.getData(&allocator, "Day1/puzzle_input.txt", 1024 * 1024);
+    const lines = try shared.getData(allocator, "Day1/puzzle_input.txt", 1024 * 1024);
     defer {
         for (lines) |line| {
             allocator.free(line);
